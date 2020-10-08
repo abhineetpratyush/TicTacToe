@@ -36,13 +36,19 @@ public class TicTacToeGame {
 			System.out.print("\n");
 		}
 	}
-	
+
 	//uc4
-	private static void makeMove(char[] ticTacToeBoard, char playerLetter, int moveIndex) {
-		if(ticTacToeBoard[moveIndex] == EMPTY) 
-			ticTacToeBoard[moveIndex] = playerLetter; 
-		else
-			System.out.println("Cell is occupied!");
+	private static boolean checkFree(char[] ticTacToeBoard, char playerLetter, int moveIndex) {
+		boolean emptyStatus;
+		if(ticTacToeBoard[moveIndex] == EMPTY) {
+			emptyStatus = true;
+			System.out.println("Index available");
+		}
+		else {
+			emptyStatus = false;
+			System.out.println("Index not available");
+		}
+		return emptyStatus;
 	}
 
 	public static void main (String[] args) {
@@ -53,9 +59,11 @@ public class TicTacToeGame {
 		char computerLetter = selectLetter(playerLetter);
 		System.out.println("Computer Letter: " + computerLetter);
 		showBoard(ticTacToeBoard);
-		System.out.println("Enter index to place letter " + playerLetter);
-		int moveIndex = takeInput.nextInt();
-		makeMove(ticTacToeBoard, playerLetter, moveIndex);
-		showBoard(ticTacToeBoard);
+		boolean emptyStatus; 
+		do {
+			System.out.println("Enter index to place letter " + playerLetter);
+			int moveIndex = takeInput.nextInt();
+			emptyStatus = checkFree(ticTacToeBoard, playerLetter, moveIndex);
+		} while(emptyStatus == false);
 	}	
 }
