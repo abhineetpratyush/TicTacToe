@@ -18,8 +18,8 @@ public class TicTacToeGame {
 	 */
 	private static char[] createBoard() {
 		char [] ticTacToeBoard = new char[10];
-		for(int i = 1; i < ticTacToeBoard.length; i++) 
-			ticTacToeBoard[i] = EMPTY;
+		for(int cellIndex = 1; cellIndex < ticTacToeBoard.length; cellIndex++) 
+			ticTacToeBoard[cellIndex] = EMPTY;
 		return ticTacToeBoard;
 	}
 
@@ -42,10 +42,10 @@ public class TicTacToeGame {
 	 * @param ticTacToeBoard
 	 */
 	private static void showBoard(char[] ticTacToeBoard) {
-		for(int rowHead = 1; rowHead <= 7; rowHead += 3) {
-			for(int cellHead = rowHead; cellHead < rowHead + 3; cellHead++) {
-				System.out.print(ticTacToeBoard[cellHead]);
-				if(cellHead % 3 != 0)
+		for(int rowIndex = 1; rowIndex <= 7; rowIndex += 3) {
+			for(int cellIndex = rowIndex; cellIndex < rowIndex + 3; cellIndex++) {
+				System.out.print(ticTacToeBoard[cellIndex]);
+				if(cellIndex % 3 != 0)
 					System.out.print(" | ");
 			}
 			System.out.print("\n");
@@ -116,16 +116,14 @@ public class TicTacToeGame {
 				(ticTacToeBoard[2] == chosenLetter && ticTacToeBoard[5] == chosenLetter && ticTacToeBoard[8] == chosenLetter) ||
 				(ticTacToeBoard[3] == chosenLetter && ticTacToeBoard[6] == chosenLetter && ticTacToeBoard[9] == chosenLetter) ||
 				(ticTacToeBoard[1] == chosenLetter && ticTacToeBoard[5] == chosenLetter && ticTacToeBoard[9] == chosenLetter) ||
-				(ticTacToeBoard[3] == chosenLetter && ticTacToeBoard[5] == chosenLetter && ticTacToeBoard[7] == chosenLetter)) {
+				(ticTacToeBoard[3] == chosenLetter && ticTacToeBoard[5] == chosenLetter && ticTacToeBoard[7] == chosenLetter)) 
 			gameMessage = "win";
-		}
 		else {
-			for(int i = 1; i <=9; i++) 
-				if(ticTacToeBoard[i] == EMPTY)
+			for(int cellIndex = 1; cellIndex < ticTacToeBoard.length; cellIndex++) 
+				if(ticTacToeBoard[cellIndex] == EMPTY)
 					counter++;
-			if(counter == 0) {
-				gameMessage = "tie";
-			} 
+			if(counter == 0) 
+				gameMessage = "tie"; 
 		}
 		return gameMessage;
 	}
@@ -156,14 +154,13 @@ public class TicTacToeGame {
 		String computerWinPossibility;
 		int cellNoForComputerWin = 0;
 		char [] ticTacToeBoardCopy = ticTacToeBoard.clone();
-		for(int i = 1; i <=9; i++) {
-			if(ticTacToeBoardCopy[i] == EMPTY) {
-				ticTacToeBoardCopy[i] = chosenLetter; 
+		for(int cellIndex = 1; cellIndex < ticTacToeBoard.length; cellIndex++) {
+			if(ticTacToeBoardCopy[cellIndex] == EMPTY) {
+				ticTacToeBoardCopy[cellIndex] = chosenLetter; 
 				computerWinPossibility = gameManager(ticTacToeBoardCopy, chosenLetter); 
-				if(computerWinPossibility.contains("win")) {
-					cellNoForComputerWin = i;
-				}
-				ticTacToeBoardCopy[i] = EMPTY;
+				if(computerWinPossibility.contains("win")) 
+					cellNoForComputerWin = cellIndex;
+				ticTacToeBoardCopy[cellIndex] = EMPTY;
 			}
 		}
 		return cellNoForComputerWin; 
@@ -180,14 +177,13 @@ public class TicTacToeGame {
 		String playerWinPossibility;
 		int cellNoForPlayerWin = 0;
 		char [] ticTacToeBoardCopy = ticTacToeBoard.clone();
-		for(int i = 1; i <=9; i++) {
-			if(ticTacToeBoardCopy[i] == EMPTY) {
-				ticTacToeBoardCopy[i] = swappedLetter; 
+		for(int cellIndex = 1; cellIndex < ticTacToeBoard.length; cellIndex++) {
+			if(ticTacToeBoardCopy[cellIndex] == EMPTY) {
+				ticTacToeBoardCopy[cellIndex] = swappedLetter; 
 				playerWinPossibility = gameManager(ticTacToeBoardCopy, swappedLetter); 
-				if(playerWinPossibility.contains("win")) {
-					cellNoForPlayerWin = i;
-				}
-				ticTacToeBoardCopy[i] = EMPTY;
+				if(playerWinPossibility.contains("win")) 
+					cellNoForPlayerWin = cellIndex;
+				ticTacToeBoardCopy[cellIndex] = EMPTY;
 			}
 		}
 		return cellNoForPlayerWin; 
@@ -258,39 +254,47 @@ public class TicTacToeGame {
 				computerPlayReturnBlock = computerPlayToBlock(ticTacToeBoard, chosenLetter);
 				computerFreeCornerAvailable = computerPlayToCorner(ticTacToeBoard);
 				computerFreeCentreOrSideAvailable = computerPlayToCentreOrSide(ticTacToeBoard);
-				if(computerPlayReturnWin != 0) {
+				if(computerPlayReturnWin != 0) 
 					moveIndex = computerPlayReturnWin;
-				}
 				else if(computerPlayReturnBlock != 0) {
 					moveIndex = computerPlayReturnBlock;
-					computerPlayReturnBlock = 0; //this is important to reset
+					computerPlayReturnBlock = 0; 
 				}
 				else if(computerFreeCornerAvailable != 0) {
 					moveIndex = computerFreeCornerAvailable;
-					computerFreeCornerAvailable = 0; //this is important to reset
+					computerFreeCornerAvailable = 0; 
 				}
 				else if(computerFreeCentreOrSideAvailable != 0) {
 					moveIndex = computerFreeCentreOrSideAvailable;
-					computerFreeCentreOrSideAvailable = 0; //this is important to reset
+					computerFreeCentreOrSideAvailable = 0; 
 				}
 			}
-			else {
+			else 
 				moveIndex = checkFree(ticTacToeBoard, chosenLetter, currentPlayer);
-			}
 			makeMove(ticTacToeBoard, chosenLetter, moveIndex);
 			System.out.println("\n--Updated board after the " + currentPlayer +"'s move--");
 			showBoard(ticTacToeBoard);
 			gameStatus = gameManager(ticTacToeBoard, chosenLetter);
 			chosenLetter = swapPlayerLetter(chosenLetter);
 			currentPlayer = swapPlayerTurn(currentPlayer);
-		}while(gameStatus.contains("change"));
+		} while(gameStatus.contains("change"));
 		if(gameStatus.contains("tie"))
 			System.out.println("It's a TIE!");
 		else
 			System.out.println("The game is WON by " + swapPlayerTurn(currentPlayer));
 	}
 
+	/**
+	 * uc13
+	 * @param args
+	 */
 	public static void main (String[] args) {
-		playGame();
+		Scanner takeInput = new Scanner(System.in);
+		char responseForAnotherGame;
+		do {
+			playGame();
+			System.out.println("Do you want to play again? (Y/N)");
+			responseForAnotherGame = takeInput.next().charAt(0);
+		} while(responseForAnotherGame == 'Y');
 	}	
 }
