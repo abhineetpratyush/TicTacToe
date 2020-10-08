@@ -166,7 +166,6 @@ public class TicTacToeGame {
 				ticTacToeBoardCopy[i] = EMPTY;
 			}
 		}
-		System.out.println("cell for computer win: " + cellNoForComputerWin);
 		return cellNoForComputerWin; 
 	}
 
@@ -191,7 +190,6 @@ public class TicTacToeGame {
 				ticTacToeBoardCopy[i] = EMPTY;
 			}
 		}
-		System.out.println("cell for computer block: " + cellNoForPlayerWin);
 		return cellNoForPlayerWin; 
 	}
 
@@ -210,7 +208,6 @@ public class TicTacToeGame {
 			freeCornerIndex = 7;
 		else if(ticTacToeBoard[9] == EMPTY)
 			freeCornerIndex = 9;
-		System.out.println(freeCornerIndex);
 		return freeCornerIndex;
 	}
 
@@ -231,11 +228,13 @@ public class TicTacToeGame {
 			freeCentreOrSideIndex = 6;
 		else if(ticTacToeBoard[8] == EMPTY)
 			freeCentreOrSideIndex = 8;
-		System.out.println(freeCentreOrSideIndex);
 		return freeCentreOrSideIndex;
 	}
 
-	public static void main (String[] args) {
+	/**
+	 * uc12
+	 */
+	private static void playGame() {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
 		System.out.println("Player letter: ");
@@ -279,11 +278,19 @@ public class TicTacToeGame {
 				moveIndex = checkFree(ticTacToeBoard, chosenLetter, currentPlayer);
 			}
 			makeMove(ticTacToeBoard, chosenLetter, moveIndex);
-			System.out.println("\n--Updated board after the move--");
+			System.out.println("\n--Updated board after the " + currentPlayer +"'s move--");
 			showBoard(ticTacToeBoard);
 			gameStatus = gameManager(ticTacToeBoard, chosenLetter);
 			chosenLetter = swapPlayerLetter(chosenLetter);
 			currentPlayer = swapPlayerTurn(currentPlayer);
 		}while(gameStatus.contains("change"));
+		if(gameStatus.contains("tie"))
+			System.out.println("It's a TIE!");
+		else
+			System.out.println("The game is WON by " + swapPlayerTurn(currentPlayer));
+	}
+
+	public static void main (String[] args) {
+		playGame();
 	}	
 }
