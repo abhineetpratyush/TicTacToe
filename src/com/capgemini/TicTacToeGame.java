@@ -144,6 +144,12 @@ public class TicTacToeGame {
 		return lastPlayer;
 	}
 
+	/**
+	 * uc8
+	 * @param ticTacToeBoard
+	 * @param chosenLetter
+	 * @return
+	 */
 	private static int computerPlay(char[] ticTacToeBoard, char chosenLetter){
 		String computerWinPossibility;
 		int cellNoForComputerWin = 0;
