@@ -7,7 +7,10 @@ public class TicTacToeGame {
 	private static final char CHARACTER_X = 'X';
 	private static final char CHARACTER_O = 'O';
 
-	//uc1
+	/**
+	 * uc1
+	 * @return
+	 */
 	private static char[] createBoard() {
 		char [] ticTacToeBoard = new char[10];
 		for(int i = 1; i < ticTacToeBoard.length; i++) 
@@ -15,7 +18,11 @@ public class TicTacToeGame {
 		return ticTacToeBoard;
 	}
 
-	//uc2
+	/**
+	 * uc2
+	 * @param playerLetter
+	 * @return
+	 */
 	private static char selectLetter(char playerLetter) {
 		char computerLetter;
 		if(playerLetter == CHARACTER_X)
@@ -25,7 +32,10 @@ public class TicTacToeGame {
 		return computerLetter;
 	}
 
-	//uc3
+	/**
+	 * uc3
+	 * @param ticTacToeBoard
+	 */
 	private static void showBoard(char[] ticTacToeBoard) {
 		for(int rowHead = 1; rowHead <= 7; rowHead += 3) {
 			for(int cellHead = rowHead; cellHead < rowHead + 3; cellHead++) {
@@ -37,18 +47,39 @@ public class TicTacToeGame {
 		}
 	}
 
-	//uc4
-	private static boolean checkFree(char[] ticTacToeBoard, char playerLetter, int moveIndex) {
+	/**
+	 * uc4
+	 * @param ticTacToeBoard
+	 * @param moveIndex
+	 * @return
+	 */
+	private static int checkFree(char[] ticTacToeBoard, char playerLetter) {
+		Scanner takeInput = new Scanner(System.in);
+		int moveIndex;
 		boolean emptyStatus;
-		if(ticTacToeBoard[moveIndex] == EMPTY) {
-			emptyStatus = true;
-			System.out.println("Index available");
-		}
-		else {
-			emptyStatus = false;
-			System.out.println("Index not available");
-		}
-		return emptyStatus;
+		do {
+			System.out.println("Enter index to place letter " + playerLetter);
+			moveIndex = takeInput.nextInt();
+			if(ticTacToeBoard[moveIndex] == EMPTY) {
+				emptyStatus = true;
+				System.out.println("Index available");
+			}
+			else {
+				emptyStatus = false;
+				System.out.println("Index not available");
+			}
+		} while(emptyStatus == false);
+		return moveIndex;
+	}
+
+	/**
+	 * uc5
+	 * @param ticTacToeBoard
+	 * @param playerLetter
+	 * @param moveIndex
+	 */
+	private static void makeMove(char[] ticTacToeBoard, char playerLetter, int moveIndex) {
+		ticTacToeBoard[moveIndex] = playerLetter;
 	}
 
 	public static void main (String[] args) {
@@ -59,11 +90,8 @@ public class TicTacToeGame {
 		char computerLetter = selectLetter(playerLetter);
 		System.out.println("Computer Letter: " + computerLetter);
 		showBoard(ticTacToeBoard);
-		boolean emptyStatus; 
-		do {
-			System.out.println("Enter index to place letter " + playerLetter);
-			int moveIndex = takeInput.nextInt();
-			emptyStatus = checkFree(ticTacToeBoard, playerLetter, moveIndex);
-		} while(emptyStatus == false);
+		int moveIndex = checkFree(ticTacToeBoard, playerLetter);
+		makeMove(ticTacToeBoard, playerLetter, moveIndex);
+		showBoard(ticTacToeBoard);
 	}	
 }
