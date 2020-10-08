@@ -214,6 +214,27 @@ public class TicTacToeGame {
 		return freeCornerIndex;
 	}
 
+	/**
+	 * uc11
+	 * @param ticTacToeBoard
+	 * @return
+	 */
+	private static int computerPlayToCentreOrSide(char[] ticTacToeBoard) {
+		int freeCentreOrSideIndex = 0;
+		if(ticTacToeBoard[5] == EMPTY)
+			freeCentreOrSideIndex = 5;
+		else if(ticTacToeBoard[2] == EMPTY)
+			freeCentreOrSideIndex = 2;
+		else if(ticTacToeBoard[4] == EMPTY)
+			freeCentreOrSideIndex = 4;
+		else if(ticTacToeBoard[6] == EMPTY)
+			freeCentreOrSideIndex = 6;
+		else if(ticTacToeBoard[8] == EMPTY)
+			freeCentreOrSideIndex = 8;
+		System.out.println(freeCentreOrSideIndex);
+		return freeCentreOrSideIndex;
+	}
+
 	public static void main (String[] args) {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
@@ -231,25 +252,27 @@ public class TicTacToeGame {
 		System.out.println("\n--Initial status of board--");
 		showBoard(ticTacToeBoard);
 		String gameStatus;
-		int computerPlayReturnWin = 0, computerPlayReturnBlock = 0, computerFreeCornerAvailable = 0, moveIndex = 0;
+		int computerPlayReturnWin = 0, computerPlayReturnBlock = 0, computerFreeCornerAvailable = 0, computerFreeCentreOrSideAvailable = 0, moveIndex = 0;
 		do {
 			if(currentPlayer.contains(PlayerNames.COMPUTER.name())) {
 				computerPlayReturnWin = computerPlayToWin(ticTacToeBoard, chosenLetter);
 				computerPlayReturnBlock = computerPlayToBlock(ticTacToeBoard, chosenLetter);
 				computerFreeCornerAvailable = computerPlayToCorner(ticTacToeBoard);
+				computerFreeCentreOrSideAvailable = computerPlayToCentreOrSide(ticTacToeBoard);
 				if(computerPlayReturnWin != 0) {
 					moveIndex = computerPlayReturnWin;
-					System.out.println("[COMPUTER AUTO-PLAYS]");
 				}
 				else if(computerPlayReturnBlock != 0) {
 					moveIndex = computerPlayReturnBlock;
 					computerPlayReturnBlock = 0; //this is important to reset
-					System.out.println("[COMPUTER AUTO-PLAYS]");
 				}
 				else if(computerFreeCornerAvailable != 0) {
 					moveIndex = computerFreeCornerAvailable;
-					System.out.println("[COMPUTER AUTO-PLAYS]");
 					computerFreeCornerAvailable = 0; //this is important to reset
+				}
+				else if(computerFreeCentreOrSideAvailable != 0) {
+					moveIndex = computerFreeCentreOrSideAvailable;
+					computerFreeCentreOrSideAvailable = 0; //this is important to reset
 				}
 			}
 			else {
