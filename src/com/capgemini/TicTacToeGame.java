@@ -1,7 +1,11 @@
 package com.capgemini;
 
+import java.util.Scanner;
+
 public class TicTacToeGame {
 	private static final char EMPTY = ' ';
+	private static final char CHARACTER_X = 'X';
+	private static final char CHARACTER_O = 'O';
 
 	//uc1
 	private static char[] createBoard() {
@@ -11,7 +15,21 @@ public class TicTacToeGame {
 		return ticTacToeBoard;
 	}
 
+	//uc2
+	private static char selectLetter(char playerLetter) {
+		char computerLetter;
+		if(playerLetter == CHARACTER_X)
+			computerLetter = CHARACTER_O;
+		else
+			computerLetter = CHARACTER_X;
+		return computerLetter;
+	}
+
 	public static void main (String[] args) {
+		Scanner takeInput = new Scanner(System.in);
 		createBoard();
+		char playerLetter = takeInput.next().charAt(0);
+		char computerLetter = selectLetter(playerLetter);
+		System.out.println("Computer Letter: " + computerLetter);
 	}	
 }
