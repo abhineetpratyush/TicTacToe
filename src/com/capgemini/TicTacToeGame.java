@@ -58,12 +58,12 @@ public class TicTacToeGame {
 	 * @param moveIndex
 	 * @return
 	 */
-	private static int checkFree(char[] ticTacToeBoard, char chosenLetter, String lastPlayer) {
+	private static int checkFree(char[] ticTacToeBoard, char chosenLetter, String currentPlayer) {
 		Scanner takeInput = new Scanner(System.in);
 		int moveIndex;
 		boolean emptyStatus;
 		do {
-			System.out.println("Enter index to place letter " + chosenLetter + " for " + lastPlayer);
+			System.out.println("Enter index to place letter " + chosenLetter + " for " + currentPlayer);
 			moveIndex = takeInput.nextInt();
 			if(ticTacToeBoard[moveIndex] == EMPTY) {
 				emptyStatus = true;
@@ -138,12 +138,12 @@ public class TicTacToeGame {
 		return chosenLetter;
 	}
 
-	private static String swapPlayerTurn(String lastPlayer) {
-		if(lastPlayer.contains(PlayerNames.PLAYER.name()))
-			lastPlayer = PlayerNames.COMPUTER.name();
+	private static String swapPlayerTurn(String currentPlayer) {
+		if(currentPlayer.contains(PlayerNames.PLAYER.name()))
+			currentPlayer = PlayerNames.COMPUTER.name();
 		else
-			lastPlayer = PlayerNames.PLAYER.name();
-		return lastPlayer;
+			currentPlayer = PlayerNames.PLAYER.name();
+		return currentPlayer;
 	}
 
 	/**
@@ -195,6 +195,25 @@ public class TicTacToeGame {
 		return cellNoForPlayerWin; 
 	}
 
+	/**
+	 * uc10
+	 * @param ticTacToeBoard
+	 * @return
+	 */
+	private static int computerPlayToCorner(char[] ticTacToeBoard) {
+		int freeCornerIndex = 0;
+		if(ticTacToeBoard[1] == EMPTY)
+			freeCornerIndex = 1;
+		else if(ticTacToeBoard[3] == EMPTY)
+			freeCornerIndex = 3;
+		else if(ticTacToeBoard[7] == EMPTY)
+			freeCornerIndex = 7;
+		else if(ticTacToeBoard[9] == EMPTY)
+			freeCornerIndex = 9;
+		System.out.println(freeCornerIndex);
+		return freeCornerIndex;
+	}
+
 	public static void main (String[] args) {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
@@ -202,41 +221,46 @@ public class TicTacToeGame {
 		char playerLetter = takeInput.next().charAt(0);
 		char computerLetter = selectLetter(playerLetter);
 		System.out.println("Computer Letter: " + computerLetter);
-		String firstChance = getWhoPlaysFirst();
+		String currentPlayer = getWhoPlaysFirst();
 		char chosenLetter;
-		if(firstChance.contains("PLAYER"))
+		if(currentPlayer.contains("PLAYER"))
 			chosenLetter = playerLetter;
 		else
 			chosenLetter = computerLetter;
-		System.out.println("First Chance for " + firstChance);
+		System.out.println("First Chance for " + currentPlayer);
 		System.out.println("\n--Initial status of board--");
 		showBoard(ticTacToeBoard);
 		String gameStatus;
-		int computerPlayReturnWin = 0, computerPlayReturnBlock = 0, moveIndex;
-		String lastPlayer = firstChance;
+		int computerPlayReturnWin = 0, computerPlayReturnBlock = 0, computerFreeCornerAvailable = 0, moveIndex = 0;
 		do {
-			if(lastPlayer.contains(PlayerNames.COMPUTER.name())) {
+			if(currentPlayer.contains(PlayerNames.COMPUTER.name())) {
 				computerPlayReturnWin = computerPlayToWin(ticTacToeBoard, chosenLetter);
 				computerPlayReturnBlock = computerPlayToBlock(ticTacToeBoard, chosenLetter);
-			}
-			if(computerPlayReturnWin != 0) {
-				moveIndex = computerPlayReturnWin;
-				System.out.println("[COMPUTER AUTO-PLAYS]");
-			}
-			else if(computerPlayReturnBlock != 0) {
-				moveIndex = computerPlayReturnBlock;
-				computerPlayReturnBlock = 0;
-				System.out.println("[COMPUTER AUTO-PLAYS]");
+				computerFreeCornerAvailable = computerPlayToCorner(ticTacToeBoard);
+				if(computerPlayReturnWin != 0) {
+					moveIndex = computerPlayReturnWin;
+					System.out.println("[COMPUTER AUTO-PLAYS]");
+				}
+				else if(computerPlayReturnBlock != 0) {
+					moveIndex = computerPlayReturnBlock;
+					computerPlayReturnBlock = 0; //this is important to reset
+					System.out.println("[COMPUTER AUTO-PLAYS]");
+				}
+				else if(computerFreeCornerAvailable != 0) {
+					moveIndex = computerFreeCornerAvailable;
+					System.out.println("[COMPUTER AUTO-PLAYS]");
+					computerFreeCornerAvailable = 0; //this is important to reset
+				}
 			}
 			else {
-				moveIndex = checkFree(ticTacToeBoard, chosenLetter, lastPlayer);
+				moveIndex = checkFree(ticTacToeBoard, chosenLetter, currentPlayer);
 			}
 			makeMove(ticTacToeBoard, chosenLetter, moveIndex);
 			System.out.println("\n--Updated board after the move--");
 			showBoard(ticTacToeBoard);
 			gameStatus = gameManager(ticTacToeBoard, chosenLetter);
 			chosenLetter = swapPlayerLetter(chosenLetter);
-			lastPlayer = swapPlayerTurn(lastPlayer);
+			currentPlayer = swapPlayerTurn(currentPlayer);
 		}while(gameStatus.contains("change"));
 	}	
 }
