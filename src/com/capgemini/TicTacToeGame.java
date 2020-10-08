@@ -106,13 +106,12 @@ public class TicTacToeGame {
 	 * @param lastPlayer
 	 * @return
 	 */
-	private static String gameManager(char[] ticTacToeBoard, char chosenLetter, String lastPlayer) {
+	private static String gameManager(char[] ticTacToeBoard, char chosenLetter) {
 		int counter = 0;
 		for(int i = 1; i <=9; i++) 
 			if(ticTacToeBoard[i] == EMPTY)
 				counter++;
 		if(counter == 0) {
-			System.out.println("The game is a TIE!");
 			return "tie";
 		}
 		else if((ticTacToeBoard[1] == chosenLetter && ticTacToeBoard[2] == chosenLetter && ticTacToeBoard[3] == chosenLetter) || 
@@ -123,13 +122,12 @@ public class TicTacToeGame {
 				(ticTacToeBoard[3] == chosenLetter && ticTacToeBoard[6] == chosenLetter && ticTacToeBoard[9] == chosenLetter) ||
 				(ticTacToeBoard[1] == chosenLetter && ticTacToeBoard[5] == chosenLetter && ticTacToeBoard[9] == chosenLetter) ||
 				(ticTacToeBoard[3] == chosenLetter && ticTacToeBoard[5] == chosenLetter && ticTacToeBoard[7] == chosenLetter)) {
-			System.out.println(lastPlayer + " WON!");
 			return "win";
 		}
 		else 
 			return "change";
 	}
-	
+
 	private static char swapPlayerLetter(char chosenLetter) {
 		if(chosenLetter == CHARACTER_X)
 			chosenLetter = CHARACTER_O;
@@ -137,7 +135,7 @@ public class TicTacToeGame {
 			chosenLetter = CHARACTER_X;
 		return chosenLetter;
 	}
-	
+
 	private static String swapPlayerTurn(String lastPlayer) {
 		if(lastPlayer.contains(PlayerNames.PLAYER.name()))
 			lastPlayer = PlayerNames.COMPUTER.name();
@@ -145,7 +143,28 @@ public class TicTacToeGame {
 			lastPlayer = PlayerNames.PLAYER.name();
 		return lastPlayer;
 	}
-	
+
+	private static int computerPlay(char[] ticTacToeBoard, char chosenLetter){
+		String computerWinPossibility;
+		int cellNoForComputerWin = 0;
+		char[] ticTacToeBoardCopy = new char[10];
+		for(int i = 0; i < ticTacToeBoardCopy.length; i++) {
+			ticTacToeBoardCopy[i] = ticTacToeBoard[i];
+		}
+		for(int i = 1; i <=9; i++) {
+			if(ticTacToeBoardCopy[i] == EMPTY) {
+				ticTacToeBoardCopy[i] = chosenLetter; 
+				computerWinPossibility = gameManager(ticTacToeBoardCopy, chosenLetter); 
+				if(computerWinPossibility.contains("win")) {
+					cellNoForComputerWin = i;
+				}
+				ticTacToeBoardCopy[i] = EMPTY;
+			}
+		}
+		//System.out.println(cellNoForComputerWin);
+		return cellNoForComputerWin; 
+	}
+
 	public static void main (String[] args) {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
@@ -163,13 +182,22 @@ public class TicTacToeGame {
 		System.out.println("\n--Initial status of board--");
 		showBoard(ticTacToeBoard);
 		String gameStatus;
+		int computerPlayReturn = 0, moveIndex;
 		String lastPlayer = firstChance;
 		do {
-			int moveIndex = checkFree(ticTacToeBoard, chosenLetter, lastPlayer);
+			if(lastPlayer.contains(PlayerNames.COMPUTER.name())) {
+				computerPlayReturn = computerPlay(ticTacToeBoard, chosenLetter);
+			}
+			if(computerPlayReturn != 0) {
+				moveIndex = computerPlayReturn;
+			}
+			else {
+				moveIndex = checkFree(ticTacToeBoard, chosenLetter, lastPlayer);
+			}
 			makeMove(ticTacToeBoard, chosenLetter, moveIndex);
 			System.out.println("\n--Updated board after the move--");
 			showBoard(ticTacToeBoard);
-			gameStatus = gameManager(ticTacToeBoard, chosenLetter, lastPlayer);
+			gameStatus = gameManager(ticTacToeBoard, chosenLetter);
 			chosenLetter = swapPlayerLetter(chosenLetter);
 			lastPlayer = swapPlayerTurn(lastPlayer);
 		}while(gameStatus.contains("change"));
