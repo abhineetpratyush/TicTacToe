@@ -29,19 +29,33 @@ public class TicTacToeGame {
 	private static void showBoard(char[] ticTacToeBoard) {
 		for(int rowHead = 1; rowHead <= 7; rowHead += 3) {
 			for(int cellHead = rowHead; cellHead < rowHead + 3; cellHead++) {
-				System.out.print(ticTacToeBoard[cellHead] + "  ");
+				System.out.print(ticTacToeBoard[cellHead]);
+				if(cellHead % 3 != 0)
+					System.out.print(" | ");
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	//uc4
+	private static void makeMove(char[] ticTacToeBoard, char playerLetter, int moveIndex) {
+		if(ticTacToeBoard[moveIndex] == EMPTY) 
+			ticTacToeBoard[moveIndex] = playerLetter; 
+		else
+			System.out.println("Cell is occupied!");
 	}
 
 	public static void main (String[] args) {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
-		showBoard(ticTacToeBoard);
 		System.out.println("Player letter (X or O): ");
 		char playerLetter = takeInput.next().charAt(0);
 		char computerLetter = selectLetter(playerLetter);
 		System.out.println("Computer Letter: " + computerLetter);
+		showBoard(ticTacToeBoard);
+		System.out.println("Enter index to place letter " + playerLetter);
+		int moveIndex = takeInput.nextInt();
+		makeMove(ticTacToeBoard, playerLetter, moveIndex);
+		showBoard(ticTacToeBoard);
 	}	
 }
