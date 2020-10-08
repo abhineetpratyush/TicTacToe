@@ -24,7 +24,7 @@ public class TicTacToeGame {
 			computerLetter = CHARACTER_X;
 		return computerLetter;
 	}
-	
+
 	//uc3
 	private static void showBoard(char[] ticTacToeBoard) {
 		for(int rowHead = 1; rowHead <= 7; rowHead += 3) {
@@ -38,10 +38,10 @@ public class TicTacToeGame {
 	public static void main (String[] args) {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
+		showBoard(ticTacToeBoard);
 		System.out.println("Player letter (X or O): ");
 		char playerLetter = takeInput.next().charAt(0);
 		char computerLetter = selectLetter(playerLetter);
 		System.out.println("Computer Letter: " + computerLetter);
-		showBoard(ticTacToeBoard);
 	}	
 }
