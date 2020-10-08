@@ -2,10 +2,15 @@ package com.capgemini;
 
 import java.util.Scanner;
 
+enum FirstTurn{
+	PLAYER, COMPUTER
+}
+
 public class TicTacToeGame {
 	private static final char EMPTY = ' ';
 	private static final char CHARACTER_X = 'X';
 	private static final char CHARACTER_O = 'O';
+	private static final int HEADS = 0;
 
 	/**
 	 * uc1
@@ -53,12 +58,12 @@ public class TicTacToeGame {
 	 * @param moveIndex
 	 * @return
 	 */
-	private static int checkFree(char[] ticTacToeBoard, char playerLetter) {
+	private static int checkFree(char[] ticTacToeBoard, char chosenLetter) {
 		Scanner takeInput = new Scanner(System.in);
 		int moveIndex;
 		boolean emptyStatus;
 		do {
-			System.out.println("Enter index to place letter " + playerLetter);
+			System.out.println("Enter index to place letter " + chosenLetter);
 			moveIndex = takeInput.nextInt();
 			if(ticTacToeBoard[moveIndex] == EMPTY) {
 				emptyStatus = true;
@@ -82,6 +87,18 @@ public class TicTacToeGame {
 		ticTacToeBoard[moveIndex] = playerLetter;
 	}
 
+	/**
+	 * uc6
+	 * @return
+	 */
+	private static String getWhoPlaysFirst() {
+		int randomInt = (int)Math.floor((Math.random()*10)%2);
+		if(randomInt == HEADS)
+			return  FirstTurn.PLAYER.name();
+		else
+			return FirstTurn.COMPUTER.name();
+	}
+
 	public static void main (String[] args) {
 		Scanner takeInput = new Scanner(System.in);
 		char[] ticTacToeBoard = createBoard();
@@ -89,9 +106,7 @@ public class TicTacToeGame {
 		char playerLetter = takeInput.next().charAt(0);
 		char computerLetter = selectLetter(playerLetter);
 		System.out.println("Computer Letter: " + computerLetter);
-		showBoard(ticTacToeBoard);
-		int moveIndex = checkFree(ticTacToeBoard, playerLetter);
-		makeMove(ticTacToeBoard, playerLetter, moveIndex);
-		showBoard(ticTacToeBoard);
+		String firstChance = getWhoPlaysFirst();
+		System.out.println("First Chance for " + firstChance);
 	}	
 }
